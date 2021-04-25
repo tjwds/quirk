@@ -1,0 +1,26 @@
+{
+  "name": "quirk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . && prettier --check .",
+    "fix": "eslint . --fix && prettier -w ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "node-fetch": "^2.6.1",
+    "random-words": "^1.1.1",
+    "to-zalgo": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "7.23.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-prettier": "8.1.0",
+    "prettier": "2.2.1"
+  }
+}
