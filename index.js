@@ -50,6 +50,12 @@ readdirSync(pluginDirectory).forEach((file) => {
           return;
         }
 
+        // don't act on empty messages (though they can have attachments)
+        // may want to reconsider this later!
+        if (event instanceof Discord.Message && !text) {
+          return;
+        }
+
         if (
           command &&
           text &&
