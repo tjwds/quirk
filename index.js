@@ -9,6 +9,7 @@ const discordClient = new Discord.Client();
 
 const helpText = {};
 const commands = {};
+const beforeReply = [];
 
 // run heartbeat every second
 const loopFunctions = [];
@@ -44,6 +45,8 @@ readdirSync(pluginDirectory).forEach((file) => {
 
       if (on === "heartbeat") {
         loopFunctions.push(fn);
+      } else if (on === "beforeReply") {
+        beforeReply.push(fn);
       } else {
         discordClient.on(on, (event) => {
           const now = new Date();
@@ -64,7 +67,8 @@ readdirSync(pluginDirectory).forEach((file) => {
           if (
             command &&
             text &&
-            (textSplit[0] !== settings.botName || textSplit[1] !== command)
+            (textSplit[0]?.toLocaleLowerCase() !== settings.botName ||
+              textSplit[1]?.toLocaleLowerCase() !== command)
           ) {
             return;
           }
@@ -90,7 +94,13 @@ readdirSync(pluginDirectory).forEach((file) => {
 
           fn.call(
             {
-              reply: event?.reply,
+              reply(replyText) {
+                const replyArgs = { text: replyText, channel: event?.channel };
+                beforeReply.forEach((beforeReplyFn) =>
+                  beforeReplyFn(replyArgs)
+                );
+                return event?.reply(replyArgs.text);
+              },
               channel: event?.channel,
               commands,
               helpText,
