@@ -7,10 +7,10 @@ console.log(`pst, the secret word is ${secretWord}`);
 
 module.exports = {
   on: "message",
+
+  shouldRegister: SETTINGS.secretWordRole,
+
   fn: ({ discordClient, text, member }) => {
-    if (!SETTINGS.secretWordRole) {
-      return;
-    }
     if (!secretWordRole) {
       // dumb hack to set the secret word role
       discordClient.guilds.fetch(SETTINGS.guildId).then((guild) => {

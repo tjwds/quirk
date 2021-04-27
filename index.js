@@ -27,80 +27,86 @@ readdirSync(pluginDirectory).forEach((file) => {
   if (!Array.isArray(plugin)) {
     plugin = [plugin];
   }
-  plugin.forEach(({ command, fn, on, help, requiredLength }) => {
-    commands[command] = { command, fn, on, help };
+  plugin.forEach(
+    ({ command, fn, on, help, requiredLength, shouldRegister }) => {
+      if (typeof shouldRegister !== "undefined" && !shouldRegister) {
+        return;
+      }
+      commands[command] = { command, fn, on, help };
 
-    if (command && help) {
-      helpText[command] = help;
-    }
+      if (command && help) {
+        helpText[command] = help;
+      }
 
-    if (!on) {
-      return;
-    }
-    if (on === "heartbeat") {
-      loopFunctions.push(fn);
-    } else {
-      discordClient.on(on, (event) => {
-        const now = new Date();
-        const text = (event && event.content) || "";
-        const textSplit = text.split(" ");
+      if (!on) {
+        return;
+      }
 
-        // don't respond to self
-        if (event?.member && event.member.user.id === discordClient.user.id) {
-          return;
-        }
+      if (on === "heartbeat") {
+        loopFunctions.push(fn);
+      } else {
+        discordClient.on(on, (event) => {
+          const now = new Date();
+          const text = (event && event.content) || "";
+          const textSplit = text.split(" ");
 
-        // don't act on empty messages (though they can have attachments)
-        // may want to reconsider this later!
-        if (event instanceof Discord.Message && !text) {
-          return;
-        }
+          // don't respond to self
+          if (event?.member && event.member.user.id === discordClient.user.id) {
+            return;
+          }
 
-        if (
-          command &&
-          text &&
-          (textSplit[0] !== settings.botName || textSplit[1] !== command)
-        ) {
-          return;
-        }
+          // don't act on empty messages (though they can have attachments)
+          // may want to reconsider this later!
+          if (event instanceof Discord.Message && !text) {
+            return;
+          }
 
-        const textWithoutCommand = textSplit.slice(2).join(" ");
+          if (
+            command &&
+            text &&
+            (textSplit[0] !== settings.botName || textSplit[1] !== command)
+          ) {
+            return;
+          }
 
-        if (requiredLength) {
-          if (typeof requiredLength === "number") {
-            if (
-              textSplit.length <
-              (command ? requiredLength + 2 : requiredLength + 1)
-            ) {
-              return;
-            }
-          } else if (typeof requiredLength === "function") {
-            if (
-              !requiredLength(command ? requiredLength + 1 : requiredLength)
-            ) {
-              return;
+          const textWithoutCommand = textSplit.slice(2).join(" ");
+
+          if (requiredLength) {
+            if (typeof requiredLength === "number") {
+              if (
+                textSplit.length <
+                (command ? requiredLength + 2 : requiredLength + 1)
+              ) {
+                return;
+              }
+            } else if (typeof requiredLength === "function") {
+              if (
+                !requiredLength(command ? requiredLength + 1 : requiredLength)
+              ) {
+                return;
+              }
             }
           }
-        }
 
-        fn.call(
-          {
-            reply: event?.reply,
-            channel: event?.channel,
-            commands,
-            helpText,
-          },
-          {
-            text: command ? textWithoutCommand : text,
-            channel: event?.channel?.name,
-            member: event?.member,
-            discordClient,
-            now,
-          }
-        );
-      });
+          fn.call(
+            {
+              reply: event?.reply,
+              channel: event?.channel,
+              commands,
+              helpText,
+            },
+            {
+              text: command ? textWithoutCommand : text,
+              channel: event?.channel?.name,
+              member: event?.member,
+              discordClient,
+              now,
+            }
+          );
+        });
+      }
     }
-  });
+  );
 });
 
 discordClient.login(TOKENS.discordToken);

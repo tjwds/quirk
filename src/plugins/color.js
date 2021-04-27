@@ -1,3 +1,4 @@
+const settings = require("../../settings");
 const SETTINGS = require("../../settings");
 
 const on = "message";
@@ -40,7 +41,7 @@ module.exports = [
       this.reply(randomColor(false, true));
     },
   },
-  SETTINGS.artChannel && {
+  {
     on: "heartbeat",
     fn: ({ discordClient, now }) => {
       if (now.getUTCHours() !== 21 || now.getUTCMinutes() !== 22) {
@@ -57,5 +58,7 @@ module.exports = [
         channel.send(randomColor(true));
       }
     },
+
+    shouldRegister: settings.yellingChannel,
   },
 ];
