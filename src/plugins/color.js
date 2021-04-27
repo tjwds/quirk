@@ -43,7 +43,7 @@ module.exports = [
   },
   {
     on: "heartbeat",
-    fn: ({ discordClient, now }) => {
+    fn({ discordClient, now }) {
       if (now.getUTCHours() !== 21 || now.getUTCMinutes() !== 22) {
         return;
       }

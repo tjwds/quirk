@@ -10,7 +10,7 @@ module.exports = {
 
   shouldRegister: SETTINGS.secretWordRole,
 
-  fn: ({ discordClient, text, member }) => {
+  fn({ discordClient, text, member }) {
     if (!secretWordRole) {
       // dumb hack to set the secret word role
       discordClient.guilds.fetch(SETTINGS.guildId).then((guild) => {
