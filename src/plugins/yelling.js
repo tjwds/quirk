@@ -6,8 +6,8 @@ module.exports = [
 
     shouldRegister: yellingChannel,
 
-    fn({ channel, text }) {
-      if (channel !== yellingChannel) {
+    fn({ channelName, text }) {
+      if (channelName !== yellingChannel) {
         return;
       }
       if (text.toLocaleUpperCase() !== text) {

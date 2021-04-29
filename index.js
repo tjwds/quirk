@@ -107,7 +107,8 @@ readdirSync(pluginDirectory).forEach((file) => {
             },
             {
               text: command ? textWithoutCommand : text,
-              channel: event?.channel?.name,
+              channelName: event?.channel?.name,
+              channel: event?.channel,
               member: event?.member,
               discordClient,
               now,
