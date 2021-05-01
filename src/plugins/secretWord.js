@@ -10,15 +10,13 @@ module.exports = {
 
   shouldRegister: SETTINGS.secretWordRole,
 
-  fn({ discordClient, text, member }) {
+  fn: async function secretWordAssigner({ discordClient, text, member }) {
     if (!secretWordRole) {
       // dumb hack to set the secret word role
-      discordClient.guilds.fetch(SETTINGS.guildId).then((guild) => {
-        guild.roles.fetch(SETTINGS.secretWordRole).then((role) => {
-          secretWordRole = role;
-        });
-      });
+      const guild = await discordClient.guilds.fetch(SETTINGS.guildId);
+      secretWordRole = await guild.roles.fetch(SETTINGS.secretWordRole);
     }
+
     const secretWordRegex = new RegExp(
       `(?:^|[ .!-,;()[]{}/'"])${secretWord}(?:$|[ .!-,;()[]{}/'"])`
     );
