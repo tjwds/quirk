@@ -44,7 +44,7 @@ module.exports = [
   {
     on: "heartbeat",
     fn({ discordClient, now }) {
-      if (now.getUTCHours() !== 21 || now.getUTCMinutes() !== 22) {
+      if (now.getUTCHours() !== 13 || now.getUTCMinutes() !== 0) {
         return;
       }
       if (now.getUTCDate() === lastDayRun) {
