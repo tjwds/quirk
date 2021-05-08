@@ -9,4 +9,6 @@ module.exports = {
   secretWordRole: "",
 
   weatherLocations: ["DC", "London", "Philadelphia", "Richmond", "Seattle"],
+
+  useDynamoDB: false,
 };
