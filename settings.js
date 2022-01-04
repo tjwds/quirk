@@ -4,6 +4,7 @@ module.exports = {
 
   artChannel: "general",
   yellingChannel: "yelling",
+  songOfTheDayChannel: "song-of-the-day",
 
   guildId: "",
   secretWordRole: "",

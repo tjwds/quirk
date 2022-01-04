@@ -17,6 +17,7 @@
     "discord.js": "^12.5.3",
     "node-fetch": "^2.6.1",
     "random-words": "^1.1.1",
+    "spotify-web-api-node": "^5.0.2",
     "to-zalgo": "^1.0.1",
     "uuid": "^8.3.2"
   },
